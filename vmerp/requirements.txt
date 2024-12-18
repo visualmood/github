@@ -3,3 +3,4 @@ pymysql
 echarts
 pandas
 openpyxl
+email_validator

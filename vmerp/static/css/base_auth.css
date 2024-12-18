@@ -1,0 +1,7 @@
+/* 设置页面背景颜色 */
+body {
+    background-color: rgb(224,228,232);
+    background-image: url("../img/bg.jpg");
+
+
+    }

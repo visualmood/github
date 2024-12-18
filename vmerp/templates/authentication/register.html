@@ -1,1 +1,92 @@
-<h1>Register</h1>
+<!-- 这是注册页面的模板文件 register.html -->
+{% extends 'base_auth.html' %}
+
+{% load static %}
+
+<!-- 引用register.css样式  注册，重置密码，忘记密码三个页面共用 -->
+{% block css %}
+  <link rel="stylesheet" href="{% static 'css/register.css' %}" />
+{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title text-center py-4">VisualMood用户注册</h4>
+
+      <!-- 引入messages组件，显示错误信息 -->
+      {% include 'components/messages.html' %}
+
+      <form method="POST" action="{% url 'register' %}">
+        {% csrf_token %}
+
+        <!-- inputZone是自定义的类名，用于控制输入框的样式 -->
+        <div class="form-group inputZone">
+          <!-- 这里的with标签用于在变量error_message未定义时，使用默认值 -->
+          {% with error_message=form_obj.username.errors.0 %}
+            <img src="{% static 'img/user.svg' %}" />
+            <input id="username" type="text" class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请输入用户名" name="username" value="{{ username }}" autocomplete="off" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+          {% endwith %}
+        </div>
+
+        <div class="form-group inputZone">
+          {% with error_message=form_obj.email.errors.0 %}
+            <img src="{% static 'img/mail.svg' %}" />
+            <input id="email" type="email" class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请输入邮箱" name="email" value="{{ email }}" autocomplete="off" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+            <!-- invalid-feedback要和is-invalid一起使用，否则不会显示错误信息 -->
+          {% endwith %}
+        </div>
+
+        <div class="form-group inputZone">
+          {% with error_message=form_obj.password.errors.0 %}
+            <img src="{% static 'img/lock.svg' %}" />
+            <img src="{% static 'img/eye.svg' %}" id="hide-password">
+            <!-- 上面第一个图标提示输入内容,只是一个提示，第二个图标提示隐藏密码，这是动态的，点击图标可以切换密码显示/隐藏，对应js文件在后面引入 -->
+            <input id="password" type="password" class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请输入密码" name="password" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+            <!-- invalid-feedback要和is-invalid一起使用，否则不会显示错误信息 -->
+          {% endwith %}
+        </div>
+
+        <div class="form-group inputZone">
+          {% with error_message=form_obj.confirm_password.errors.0 %}
+            <img src="{% static 'img/lock.svg' %}" />
+            <img src="{% static 'img/eye.svg' %}" id="hide-password2">
+            <!-- 上面第一个图标提示输入内容,只是一个提示，第二个图标提示隐藏密码，这是动态的，点击图标可以切换密码显示/隐藏，对应js文件在后面引入 -->
+            <input id="confirm_password" type="password" class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请再次输入密码" name="confirm_password" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+            <!-- invalid-feedback要和is-invalid一起使用，否则不会显示错误信息 -->
+          {% endwith %}
+        </div>
+
+        <div class="row form-group inputZone ml-2">
+          <div class="col">
+            <img src="{% static 'img/key.svg' %}" class="pl-3">
+            <input type="text"  class="form-control" placeholder="验证码,不分大小写" name="verify_code" autocomplete="off" required />
+          </div>
+          <div class="col">
+            <img src="{% url 'get-registercode' %}" id="verify-image" >
+          </div>
+        </div>
+
+        <div class="text-center py-2">
+          <button type="submit" class="btn btn-primary">提交注册</button>
+        </div>
+
+        <p class="small-font">
+          提交申请即表示您同意并遵守<a href="#">《VisualMood 用户协议》</a>与<a href="#">《VisaulMood 隐私政策》</a>
+        </p>
+        <p class="small-font">
+          如果您已有账号,请点击这里<a href="{% url 'login' %}">立即登录</a>
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+
+<!-- 引用register.js脚本   -->
+{% block js %}
+  <script src="{% static 'js/register.js' %}"></script>
+{% endblock %}

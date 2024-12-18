@@ -6,9 +6,29 @@
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
         <title>欢迎使用vmerp</title>
 
+
+
+        {% load static %}
+
+        <!-- 装入网站图标 -->
+        <link rel="shortcut icon" type="image/jpg" href="{% static 'img/favicon.jpg' %}"/>
+        <script src="{% static 'js/sweetalert2.min.js' %}"></script>
+
+
     </head>
     <body>
+
+        {% include 'components/sweetalert2_msg.html' %}
+
         <h1>欢迎使用vmerp</h1>
+        <br>
+        <span>
+            <a href="{% url 'register' %}">注册页面</a>
+            <a href="{% url 'login' %}">登录页面</a>
+            <a href="{% url 'admin:index' %}">后台管理</a>
+
+        </span>
+
         <p>vmerp是一个基于Python的Web应用框架，旨在帮助开发者快速开发Web应用。</p>
         <p>vmerp的主要特点有：</p>
         <ul>
@@ -30,4 +50,10 @@
         </ul>
         <p>欢迎加入vmerp的开发团队，共同打造一个功能强大、易学易用、可扩展的Web应用框架。</p>
     </body>
+
+
+
+
+
+
 </html>

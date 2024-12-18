@@ -1,0 +1,70 @@
+<!-- 通用分页器模板，用于显示 分页功能，需要有二个参数：search_text和page_obj，其中page_obj是分页器的对象，包含了分页器的所有信息，包括当前页，页码范围，总页数等-->
+<!-- 这里的search_text是搜索框的文本，如果有搜索，则显示搜索框，否则不显示-->
+<!-- 这里的page_obj是分页器的对象，包含了分页器的所有信息，包括当前页，页码范围，总页数等-->
+<!-- 分页显示在右下角，使用bootstrap的分页器样式 属性justify-content-end表示右对齐-->
+<!-- 本分页器最多显示11个页码数字，如果当前页的数字大于5，则前一页后面显示省略号，否则不显示，如果当前页的数字小于总页数的倒数5页，则后一页前面显示省略号，否则不显示 -->
+<!-- 前一页和后一页通过当前页面动态变化，当第一页或最后一页时，前一页和后一页按钮显示disabled属性，表示按钮点击不起作用-->
+<!-- 这里的分页器模板使用了bootstrap的分页器样式，可以根据需要进行修改本分页器模板可以直接使用，也可以根据需要进行修改-->
+<div class="row">
+    <div class="col-12">
+        <nav aria-label="Page navigation general template">
+            <ul class="pagination justify-content-center">
+
+            <!-- 分页器 首页按钮-->
+            <!-- 这里的page_obj.number是当前页的数字，如果当前页的数字等于1，则显示第一页的按钮高亮-->
+            {% if page_obj.number == 1 %}
+                <li class="page-item active"> <a class="page-link" href="?page=1&search={{ search_text }}">首页</a> </li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page=1&search={{ search_text }}">首页</a> </li>
+            {% endif %}
+
+
+            <!-- 分页器上一页-->
+                <!-- .has_previous属性判断page_obj对象是否有上一页，如果if有，则显示前一页的按钮，否则else不显示-->
+                {% if page_obj.has_previous %}
+                    <!-- 这里的previous_page_number是获取page_obj对象当前页的上一页的页码，然后通过url标签生成url，并通过href属性设置按钮的链接-->
+                    <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}&search={{ search_text }}">前一页</a> </li>
+                {% endif %}
+
+            <!-- 分页器省略号-->
+            <!-- 这里的page_obj.number是当前页的数字，如果当前页的数字大于5，则显示省略号，否则不显示-->
+            {% if page_obj.number > 6 %} <li class="page-item disabled"> <a class="page-link">...</a> </li> {% endif %}
+
+            <!-- 分页器 数字页,先利用paginator的page_range属性，生成页面的数字范围，然后就从头到尾遍历这个范围-->
+            {% for num in page_obj.paginator.page_range %}
+                <!-- 如果当前页的数字范围在当前页的前两页或后两页（and表示逻辑与同时满足二个条件），则显示该页的数字。否则不在范围内，不显示-->
+                {% if  num >= page_obj.number|add:-5 and num <= page_obj.number|add:5 %}
+                    <!-- 如果当前页的数字等于当前页的数字，则设置active属性，否则没有这个属性-->
+                    {% if num == page_obj.number %}
+                        <li class="page-item active" aria-current="page"> <a class="page-link" href="?page={{ num }}&search={{ search_text }}">{{num}}</a> </li>
+                    {% else %}
+                        <li class="page-item"> <a class="page-link" href="?page={{ num }}&search={{ search_text }}">{{num}}</a> </li>
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+            <!-- 分页器省略号  page_obj.number是当前页的数字， pagenator.num_pages是总页数 |add:-5表示总页数倒数5页，如果当前页的数字小于总页数的倒数5页，则显示省略号，否则不显示-->
+            {% if page_obj.number < page_obj.paginator.num_pages|add:-5 %} <li class="page-item disabled"> <a class="page-link">...</a> </li> {% endif %}
+
+
+            <!-- 分页器下一页-->
+            <!-- .has_next属性判断page_obj对象是否有下一页，如果if有，则显示后一页的按钮，否则else不显示-->
+            {% if page_obj.has_next %}
+                <!-- 这里的next_page_number是获取page_obj对象当前页的下一页的页码，然后通过url标签生成url，并通过href属性设置按钮的链接-->
+                <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}&search={{ search_text }}">后一页</a> </li>
+            {% endif %}
+
+
+            <!-- 分页器 末页按钮-->
+            <!-- 这里的page_obj.number是当前页的数字，page_obj.paginator.num_pages是总页数，如果当前页的数字等于总页数，最后一页的按钮高亮-->
+            {% if page_obj.number == page_obj.paginator.num_pages %}
+                <li class="page-item active"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}&search={{ search_text }}">末页</a></li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="?page={{page_obj.paginator.num_pages}}&search={{ search_text }}">末页</a></li>
+            {% endif %}
+
+            </ul>
+        </nav>
+    </div>
+</div>
+

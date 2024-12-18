@@ -1,0 +1,58 @@
+.card {
+    margin-top: 100px;
+}
+
+.inputZone {
+    position: relative;
+    margin-bottom: 20px;
+    margin-left: 25px;
+    margin-right: 25px;
+}
+
+input.form-control {
+    padding-left: 55px;
+    height: 50px;
+    font-size: 16px;
+}
+
+img {
+    position: absolute;
+    top: 10px;
+    left: 15px;
+}
+
+/* 设置关闭密码显示按钮的样式： */
+#hide-password,#hide-password2 {
+    top:12px;
+    left:90%;
+    transition: all 0.3s ease-in-out;
+    cursor: pointer;
+
+}
+
+#hide-password:hover,#hide-password2:hover {
+    transform: scale(1.4);
+}
+
+
+
+p.small-font {
+    text-align: center;
+    margin-top: 15px;
+    font-size: 14px;
+    color: #999;
+}
+
+#verify-image {
+    width: 130px;
+    top: 0px;
+}
+
+
+
+
+
+
+
+
+

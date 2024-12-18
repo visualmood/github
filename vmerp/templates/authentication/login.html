@@ -1,1 +1,74 @@
-<h1>Login</h1>
+<!-- 这是登录页面的模板文件 login.html -->
+{% extends 'base_auth.html' %}
+
+{% load static %}
+
+{% block css %}
+  <!-- 引入CSS文件 注册，登录，验证密码，修改密码等可以全部共用register.css 就不用为每一个页面单独设置css文件 -->
+  <link rel="stylesheet" href="{% static 'css/login.css' %}" />
+{% endblock %}
+
+
+{% block content %}
+  <div class="card">
+    <div class="card-body">
+      <h4 class="card-title text-center py-4">VisualMood管理系统登录</h4>
+
+      <!-- 引入messages组件，显示错误信息 -->
+      {% include 'components/messages.html' %}
+
+      <form method="POST" action="{% url 'login' %}">
+        {% csrf_token %}
+
+        <!-- inputZone是自定义的类名，用于控制输入框的样式 -->
+        <div class="form-group inputZone">
+          <!-- 这里的with标签用于在变量error_message未定义时，使用默认值 -->
+          {% with error_message=form_obj.username.errors.0 %}
+            <img src="{% static 'img/user.svg' %}" />
+            <input id="username"  type="text"  class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请输入用户名" name="username" value="{{ username }}" autocomplete="off" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+          {% endwith %}
+        </div>
+
+        <div class="form-group inputZone">
+          {% with error_message=form_obj.password.errors.0 %}
+            <!-- 下面第一个图标提示输入内容,只是一个提示，第二个图标提示隐藏密码，这是动态的，点击图标可以切换密码显示/隐藏，对应js文件在后面引入 -->
+            <img src="{% static 'img/lock.svg' %}" >
+            <img src="{% static 'img/eye.svg' %}" id="hide-password">
+            <input id="password"   type="password"  class="form-control {% if error_message %}is-invalid{% endif %}" placeholder="请输入密码" name="password" required />
+            <span class="invalid-feedback">{{ error_message }}</span>
+            <!-- invalid-feedback要和is-invalid一起使用，否则不会显示错误信息 -->
+          {% endwith %}
+        </div>
+
+        <div class="row form-group ml-2">
+          <div class="col">
+            <img src="{% static 'img/key.svg' %}" class="pl-3">
+            <input type="text"  name="verify_code" class="form-control" placeholder="输入验证码，不分大小写" autocomplete="off"  required>
+          </div>
+          <div class="col">
+            <img src="{% url 'get-logincode' %}" id="verify-img" alt="验证码" >
+          </div>
+        </div>
+        <div class="text-center py-2">
+          <button type="submit" class="btn btn-primary">登录</button>
+        </div>
+
+        <p class="small-font">忘记密码， <a href="{% url 'forget-password' %}">重置密码</a></p>
+        <p class="small-font">还没有账号， <a href="{% url 'register' %}">马上注册</a></p>
+        <p class="small-font">使用超级管理员账号 <a href="{% url 'admin:index' %}">登录后台</a></p>
+
+
+        </p>
+      </form>
+    </div>
+  </div>
+{% endblock %}
+
+
+<!-- 引入JS文件 -->
+{% block js %}
+  <script src="{% static 'js/login.js' %}"></script>
+{% endblock %}
+
+

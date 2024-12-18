@@ -1,0 +1,39 @@
+<!-- 自定义分页组件：接口expenses为分页对象，search_text为搜索关键字,可以在后端视图函数中获取。直接修改本模板文件即可复用。 -->
+<!-- 注意：本模板文件中，分页组件的样式使用了Bootstrap的分页组件样式，如果需要使用其他样式，请自行修改。 -->
+<!-- 上一页下一页会随着当前页码的变化而隐藏或显示，搜索框会根据当前搜索关键字自动填充。 -->
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-end">   
+        <!-- /* 这里的justify-content-end可以让分页组件居右 */ -->
+
+        <!-- 上一页按钮 -->
+        {% if expenses.has_previous %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ expenses.previous_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}">上一页</a>
+            </li>
+        {% endif %}
+
+        <!-- 页码按钮 -->
+        {% for i in expenses.paginator.page_range %}
+            {% if i >= expenses.number|add:-5 and i <= expenses.number|add:5 %} 
+            <!-- /* 这里的add:-5和add:5可以让当前页码左右各显示5页的页码按钮 */ -->
+                {% if expenses.number == i %}
+                    <li class="page-item active" aria-current="page">
+                        <a class="page-link" href="?page={{ i }}{% if search_text %}&search={{ search_text }}{% endif %}">{{ i }} <span class="sr-only">(current)</span></a>
+                    </li>
+                {% else %}
+                    <li class="page-item">
+                        <a class="page-link" href="?page={{ i }}{% if search_text %}&search={{ search_text }}{% endif %}">{{ i }}</a>
+                    </li>
+                {% endif %}
+            {% endif %}
+        {% endfor %}
+
+        <!-- 下一页按钮 -->
+        {% if expenses.has_next %}
+            <li class="page-item">
+                <a class="page-link" href="?page={{ expenses.next_page_number }}{% if search_text %}&search={{ search_text }}{% endif %}">下一页</a>
+            </li>
+        {% endif %}
+    </ul>
+</nav>
